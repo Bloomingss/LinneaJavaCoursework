@@ -13,16 +13,14 @@ public class Note {
     private List<NoteContent> content;
     private String createdAt;
     private String modifiedAt;
-    private ArrayList<Category> categories;
 
     @JsonCreator
-    public Note(@JsonProperty("name") String name, @JsonProperty("id") String id,@JsonProperty("createdAt") String createdAt, @JsonProperty("modifiedAt") String modifiedAt, @JsonProperty("content") ArrayList<NoteContent> content, @JsonProperty("categories") ArrayList<Category> categories) {
+    public Note(@JsonProperty("name") String name, @JsonProperty("id") String id,@JsonProperty("createdAt") String createdAt, @JsonProperty("modifiedAt") String modifiedAt, @JsonProperty("content") ArrayList<NoteContent> content) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.content = content;
-        this.categories = categories;
     }
 
     public String getId() {
@@ -53,17 +51,8 @@ public class Note {
     public List<NoteContent> getContent() {
         return content;
     }
-
     public void setContent(List<NoteContent> newContent) {
         this.content = newContent;
-    }
-
-    public void setCategories(ArrayList<Category> newCategories) {
-        this.categories = newCategories;
-    }
-
-    public ArrayList<Category> getCategories() {
-        return categories;
     }
 
 

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="uk.ac.ucl.model.Note" %>
-<%@ page import="uk.ac.ucl.model.NoteContent" %>
+<%@ page import="uk.ac.ucl.model.TextNote" %>
+<%@ page import="uk.ac.ucl.model.URLNote" %>
+<%@ page import="uk.ac.ucl.model.ImageNote" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,41 +15,40 @@
         <header>
             <h1>Edit Note</h1>
             <nav>
-                <a href="index.html">Home</a>
-                <a href="addNote.html">Create Note</a>
-                <a href="createCategory.html">Create Category</a>
-                <a href="search.html">Search</a>
+                <a href="${pageContext.request.contextPath}/index">Home</a>
+                <a href="${pageContext.request.contextPath}/addNote">Create Note</a>
+                <a href="${pageContext.request.contextPath}/createCategory">Create Category</a>
+                <a href="${pageContext.request.contextPath}/search">Search</a>
             </nav>
         </header>
 
         <% Note note = (Note) request.getAttribute("note"); %>
         <% if (note != null) { %>
             <div class="form-container">
-                <form method="POST" action="editNote.html">
+                <form method="post" action="${pageContext.request.contextPath}/editNote">
                     <input type="hidden" name="id" value="<%= note.getId() %>">
 
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input type="text" id="title" name="title" value="<%= note.getName() %>" required>
+                        <input type="text" id="title" name="title" value="<%= note.getTitle() %>" required>
                     </div>
 
-                    <% for (NoteContent content : note.getContent()) {
-                    if (content.getType().equals("text")) { %>
+                    <% if (note instanceof TextNote) { %>
                         <div class="form-group">
                             <label for="content">Content:</label>
                             <textarea id="content" name="content" rows="10" required><%= ((TextNote)note).getContent() %></textarea>
                         </div>
-                    <% } else if (content.getType().equals("url")) { %>
+                    <% } else if (note instanceof URLNote) { %>
                         <div class="form-group">
                             <label for="url">URL:</label>
                             <input type="url" id="url" name="url" value="<%= ((URLNote)note).getUrl() %>" required>
                         </div>
-                    <% } else if (content.getType().equals("image"))) { %>
+                    <% } else if (note instanceof ImageNote) { %>
                         <div class="form-group">
                             <label for="imagePath">Image Path:</label>
                             <input type="text" id="imagePath" name="imagePath" value="<%= ((ImageNote)note).getImagePath() %>" required>
                         </div>
-                    <% } } %>
+                    <% } %>
 
                     <div class="button-group">
                         <button type="submit" class="button">Save Changes</button>

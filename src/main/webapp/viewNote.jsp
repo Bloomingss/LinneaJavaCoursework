@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="uk.ac.ucl.model.Note" %>
 <%@ page import="uk.ac.ucl.model.Category" %>
-<%@ page import="uk.ac.ucl.model.NoteContent" %>
 <%@ page import="uk.ac.ucl.model.NotesModel" %>
 <!DOCTYPE html>
 <html>
@@ -17,10 +15,10 @@
         <header>
             <h1>View Note</h1>
             <nav>
-                <a href="index.html">Home</a>
-                <a href="addNote.html">Create Note</a>
-                <a href="createCategory.html">Create Category</a>
-                <a href="search.html">Search</a>
+                <a href="${pageContext.request.contextPath}/index">Home</a>
+                <a href="${pageContext.request.contextPath}/addNote">Create Note</a>
+                <a href="${pageContext.request.contextPath}/createCategory">Create Category</a>
+                <a href="${pageContext.request.contextPath}/search">Search</a>
             </nav>
         </header>
         <% Note note = (Note) request.getAttribute("note"); %>
@@ -28,40 +26,39 @@
             <div class="note-content">
                 <h2><%= note.getName() %></h2>
                 <p class="note-date">Created: <%= note.getCreatedAt() %></p>
-                <p class="note-date">Last modified: <%= note.getModifiedAt() %></p>
+                <p class="note-date">Last modified: <%= note.getModiAt() %></p>
 
-                <% ArrayList<Category> noteCategories = note.getCategories(); %>
+                <% List<String> noteCategories = note.getCategories(); %>
                 <% if (noteCategories != null && !noteCategories.isEmpty()) { %>
                     <div class="categories">
                         <h3>Categories:</h3>
                         <ul>
-                            <% for (Category category : noteCategories) { %>
-                                <li><a href="${pageContext.request.contextPath}/viewCategory?id=<%= category.getId() %>"><%= category.getId() %></a></li>
+                            <% for (String categoryId : noteCategories) { %>
+                                <li><a href="${pageContext.request.contextPath}/viewCategory?id=<%= categoryId %>"><%= categoryId %></a></li>
                             <% } %>
                         </ul>
                     </div>
                 <% } %>
 
                 <div class="note-body">
-                  <% for (NoteContent content : note.getContent()) {
-                      if (content.getType().equals("text")) { %>
+                    <% if (note instanceof TextNote) { %>
                         <div class="text-note">
-                            <p><%= content.getContent() %></p>
+                            <p><%= ((TextNote)note).getContent() %></p>
                         </div>
-                    <% } else if (content.getType().equals("url")) { %>
+                    <% } else if (note instanceof URLNote) { %>
                         <div class="url-note">
-                            <p>URL: <a href="<%= content.getContent() %>" target="_blank"><%= content.getContent() %></a></p>
+                            <p>URL: <a href="<%= ((URLNote)note).getUrl() %>" target="_blank"><%= ((URLNote)note).getUrl() %></a></p>
                         </div>
-                    <% } else if (content.getType().equals("image")) { %>
+                    <% } else if (note instanceof ImageNote) { %>
                         <div class="image-note">
-                            <img src="<%= content.getContent() %>" alt="<%= note.getName() %>">
+                            <img src="<%= ((ImageNote)note).getImagePath() %>" alt="<%= note.getTitle() %>">
                         </div>
-                    <% } }%>
+                    <% } %>
                 </div>
 
                 <div class="note-actions">
-                    <a href="/editNote.html?id=<%= note.getId() %>" class="button">Edit</a>
-                    <a href="/deleteNote.html?id=<%= note.getId() %>" class="button delete" onclick="return confirm('Are you sure you want to delete this note?')">Delete</a>
+                    <a href="${pageContext.request.contextPath}/editNote?id=<%= note.getId() %>" class="button">Edit</a>
+                    <a href="${pageContext.request.contextPath}/deleteNote?id=<%= note.getId() %>" class="button delete" onclick="return confirm('Are you sure you want to delete this note?')">Delete</a>
                 </div>
             </div>
         <% } else { %>
