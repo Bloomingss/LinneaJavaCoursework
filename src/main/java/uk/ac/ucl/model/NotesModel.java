@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class NotesModel {
     private static NotesModel instance = null;
-    private NoteIndex noteIndex;
+    private NoteIndex noteIndex = null;
     private final String DATA_DIR = "notes";
     private final String INDEX_FILE = "notes.json";
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -25,7 +25,14 @@ public class NotesModel {
         return instance;
     }
 
-//    public void addNote(Note note) {
+    public NoteIndex getNoteIndex() {
+        if (noteIndex == null) {
+            noteIndex = new NoteIndex();
+        }
+        return noteIndex;
+    }
+
+    //    public void addNote(Note note) {
 //        noteIndex.addNote(note);
 //        saveToFile();
 //    }
@@ -59,7 +66,7 @@ public class NotesModel {
     }
 
     public List<Category> getAllCategories() {
-        return noteIndex.getAllCategories();
+        return getNoteIndex().getAllCategories();
     }
 
     public void addNoteToCategory(String noteId, String categoryId) {

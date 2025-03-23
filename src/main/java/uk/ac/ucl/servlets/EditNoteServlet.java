@@ -1,5 +1,6 @@
 package uk.ac.ucl.servlets;
 
+import jakarta.servlet.annotation.WebServlet;
 import uk.ac.ucl.model.Note;
 import uk.ac.ucl.model.NotesModel;
 
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@WebServlet("/editNote.html")
 public class EditNoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
